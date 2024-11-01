@@ -21,6 +21,6 @@ El PoC explota una vulnerabilidad en Imunify360 Webshield 1.21 que permite el ac
 
 Clona este repositorio y navega al directorio del proyecto:
 
-```bash
-git clone https://github.com/moften/imunify360-bypass-poc.git
+```bash[
+git clone https://github.com/moften/imunify360-webshield-1.21.git
 cd imunify360-bypass-poc
