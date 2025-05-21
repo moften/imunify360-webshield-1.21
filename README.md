@@ -1,7 +1,8 @@
 # imunify360-webshield-1.21
-# m10sec@proton.me
+Desarrollado por m10sec - m10sec@proton.me
+CVE: Path Traversal Custom Bypass Vulnerability
 
-# PoC para Bypass en Imunify360 Webshield 1.21
+# PoC para Bypass en Imunify360 Webshield 1.21 - Imunify360 WebShield 1.21 Bypass Tester
 
 Este repositorio contiene un **Proof of Concept (PoC)** para un bypass de reglas de filtrado en **Imunify360 Webshield** versión **1.21**. El PoC explora una vulnerabilidad que permite evadir el filtrado de URL mediante el uso de caracteres codificados.
 
